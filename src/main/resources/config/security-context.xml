@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+     xmlns="http://www.springframework.org/schema/security"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/security
+     http://www.springframework.org/schema/security/spring-security.xsd
+     ">
+
+	<http pattern="/**/*.js" security="none"/>
+	<http pattern="/**/*.css" security="none"/>
+	<http pattern="/images/*" security="none"/>
+	
+	<http auto-config="true" use-expressions="true" access-denied-page="/denied">
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/login_form" access="isAnonymous()"/>
+		<intercept-url pattern="/main" access="permitAll"/>
+		<intercept-url pattern="/**" access="permitAll"/>
+		
+		<form-login 
+			username-parameter="loginid" 
+			password-parameter="loginpwd"
+			login-page="/login_form"
+			default-target-url="/main"
+			authentication-success-handler-ref="signinSuccessHandler"
+     		authentication-failure-handler-ref="signinFailureHandler"
+     		always-use-default-target="false"
+		/>
+	</http>
+
+	<beans:bean id="signinSuccessHandler" class="com.mycompany.myapp.SigninSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/main" />
+	</beans:bean>
+	<beans:bean id="signinFailureHandler" class="com.mycompany.myapp.SigninFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login_form?fail=true" />
+	</beans:bean>
+	
+	<authentication-manager>
+		<authentication-provider user-service-ref="customJdbcDaoImpl" />
+	</authentication-manager>
+     
+	<beans:bean id="customJdbcDaoImpl" class="com.mycompany.myapp.CustomJdbcDaoImpl">
+		<beans:property name="dataSource" ref="dataSource"/>
+		<beans:property name="rolePrefix" value=""/>
+		<beans:property name="usersByUsernameQuery" value="SELECT ID, PASSWORD, NAME FROM MEMBER_INFO WHERE ID=?"/>
+		<beans:property name="authoritiesByUsernameQuery" value="SELECT ROLE_ID FROM MEMBER_ROLE WHERE ID=?"/>
+		<beans:property name="enableGroups" value="false"/>
+	</beans:bean>
+     
+	<context:property-placeholder location="classpath:properties/database.properties"/>
+	
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<beans:property name="driverClassName" value="${database.driver}"/>
+		<beans:property name="url" value="${database.url}"/>
+		<beans:property name="username" value="${database.username}"/>
+		<beans:property name="password" value="${database.password}"/>
+	</beans:bean>
+</beans:beans>

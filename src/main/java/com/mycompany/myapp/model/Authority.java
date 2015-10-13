@@ -38,4 +38,12 @@ public class Authority implements GrantedAuthority {
 
 		return false;
 	}
+	
+	public int hashCode() {
+		return this.authority.hashCode();
+	}
+
+	public String toString() {
+		return this.authority;
+	}
 }

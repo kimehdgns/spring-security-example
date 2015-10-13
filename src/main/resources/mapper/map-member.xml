@@ -7,7 +7,7 @@
 		<result property="password" column="password" />
 		<result property="name" column="name" />
 		
-		<collection property="authorities" resultMap="result_authority" />
+		<collection property="authorities" resultMap="result_authority" columnPrefix="a_" />
 	</resultMap>
 	
 	<resultMap id="result_authority" type="authority">
@@ -20,12 +20,12 @@
 			member_info.id AS id,
 			member_info.password AS password,
 			member_info.name AS name,
-			authority.authority AS authority,
-			authority.authority_name AS authority_name
+			authority.authority AS a_authority,
+			authority.authority_name AS a_authority_name
 		FROM
 			member_info AS member_info
 		LEFT JOIN member_authority AS member_authority USING (id)
-		LEFT JOIN member_authority AS authority USING (authority)
+		LEFT JOIN authority AS authority USING (authority)
 		WHERE
 			member_info.id = #{username}
 	</select>

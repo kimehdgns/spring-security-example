@@ -14,7 +14,6 @@
 					alert("로그인 비밀번호를 입력해주세요");
 					$("#loginpwd").focus();
 				}else{
-					$("#loginfrm").attr("action", "<c:url value='/j_spring_security_check'/>");
 					$("#loginfrm").submit();
 				}
 			});
@@ -22,7 +21,7 @@
 
 		function login() {
 			$.ajax({
-				url : './j_spring_security_check',
+				url : $('#loginfrm').attr('action'),
 				data: $('form input').serialize(),
 				type: 'POST',
 				dataType : 'json',

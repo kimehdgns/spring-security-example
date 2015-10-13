@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
@@ -12,33 +15,31 @@
 	<http pattern="/images/*" security="none" />
 
 	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/login_form" access="isAnonymous()" />
-		<intercept-url pattern="/main" access="permitAll" />
+		<intercept-url pattern="/login_form" access="permitAll" />
+		<intercept-url pattern="/main" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/**" access="permitAll" />
 
-		<form-login username-parameter="loginid"
-			password-parameter="loginpwd" login-page="/login_form"
-			default-target-url="/main" authentication-success-handler-ref="signinSuccessHandler"
+		<form-login 
+			username-parameter="loginid"
+			password-parameter="loginpwd" 
+			login-page="/login_form"
+			login-processing-url="/login_form"
+			default-target-url="/main" 
+			authentication-success-handler-ref="signinSuccessHandler"
 			authentication-failure-handler-ref="signinFailureHandler"
-			always-use-default-target="false" />
+			always-use-default-target="true" />
 			
 		<remember-me 
 			data-source-ref="dataSource"
 			remember-me-parameter="remember"
 			key="myAppKey"/>
 			
-		<!-- <access-denied-handler error-page="/denied"/> -->
+		<access-denied-handler error-page="/denied"/>
 		
 		<csrf />
+		
+		<logout invalidate-session="true" logout-success-url="/login/lgoin" />
 	</http>
-
-	<beans:bean id="signinSuccessHandler" class="com.mycompany.myapp.handler.SigninSuccessHandler">
-		<beans:property name="defaultTargetUrl" value="/main" />
-	</beans:bean>
-	<beans:bean id="signinFailureHandler" class="com.mycompany.myapp.handler.SigninFailureHandler">
-		<beans:property name="defaultFailureUrl" value="/login_form?fail=true" />
-	</beans:bean>
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="loginServiceImpl">
@@ -46,5 +47,45 @@
 		</authentication-provider>
 	</authentication-manager>
 	
-	<beans:bean id="loginServiceImpl" class="com.mycompany.myapp.service.impl.LoginServiceImpl"/>
+	<context:property-placeholder location="classpath:properties/database.properties" ignore-unresolvable="true"/>
+	
+	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<beans:property name="driverClassName" value="${database.driver}" />
+		<beans:property name="url" value="${database.url}" />
+		<beans:property name="username" value="${database.username}" />
+		<beans:property name="password" value="${database.password}" />
+		<beans:property name="validationQuery" value="SELECT 1" />
+		<beans:property name="testOnBorrow" value="true" />
+	</beans:bean>
+
+	<!-- Tx Manager -->
+	<beans:bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+	
+	<!-- MyBatis SessionFactory/Session -->
+	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="configLocation" value="classpath:config/mybatis-context.xml" />
+	</beans:bean>
+	
+	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<beans:constructor-arg index="0" ref="sqlSessionFactory" />
+	</beans:bean>
+	
+	<beans:bean id="signinSuccessHandler" class="com.mycompany.myapp.handler.SigninSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/main" />
+	</beans:bean>
+	
+	<beans:bean id="signinFailureHandler" class="com.mycompany.myapp.handler.SigninFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login_form?fail=true" />
+	</beans:bean>
+	
+	<beans:bean id="loginDAOImpl" class="com.mycompany.myapp.dao.impl.LoginDAOImpl">
+		<beans:property name="sqlSession" ref="sqlSession"/>
+	</beans:bean>
+	
+	<beans:bean id="loginServiceImpl" class="com.mycompany.myapp.service.impl.LoginServiceImpl">
+		<beans:property name="loginDAO" ref="loginDAOImpl"/>
+	</beans:bean>
 </beans:beans>

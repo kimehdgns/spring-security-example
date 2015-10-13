@@ -4,16 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.mycompany.myapp.dao.LoginDAO;
 import com.mycompany.myapp.model.MemberInfo;
 
-@Repository
 public class LoginDAOImpl implements LoginDAO {
 
-	@Autowired
 	private SqlSession sqlSession;
 	
 	@Override
@@ -25,4 +21,11 @@ public class LoginDAOImpl implements LoginDAO {
 		return sqlSession.selectOne("ns_member.select_member_by_user_name", paramMap);
 	}
 
+	public SqlSession getSqlSession() {
+		return sqlSession;
+	}
+
+	public void setSqlSession(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
 }

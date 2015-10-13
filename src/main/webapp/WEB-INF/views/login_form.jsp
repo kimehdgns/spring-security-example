@@ -60,6 +60,7 @@
 					<input type="text" id="loginid" name="loginid" value=""/>
 				</td>
 				<td rowspan="2">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="button" id="loginbtn" value="submit login"/>
 					<button type="button" onclick="login();">ajax login</button>
 				</td>
@@ -68,6 +69,11 @@
 				<td>비밀번호</td>
 				<td>
 					<input type="text" id="loginpwd" name="loginpwd" value=""/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<label><input type="checkbox" name="remember" /> remember-me</label>
 				</td>
 			</tr>
 		</table>

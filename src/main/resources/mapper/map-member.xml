@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ns_member">
+	<resultMap id="result_member_info" type="memberInfo">
+		<result property="id" column="id" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		
+		<collection property="authorities" resultMap="result_authority" />
+	</resultMap>
+	
+	<resultMap id="result_authority" type="authority">
+		<result property="authority" column="authority"/>
+		<result property="authorityName" column="authority_name"/>
+	</resultMap>
+	
+	<select id="select_member_by_user_name" resultMap="result_member_info">
+		SELECT
+			member_info.id AS id,
+			member_info.password AS password,
+			member_info.name AS name,
+			authority.authority AS authority,
+			authority.authority_name AS authority_name
+		FROM
+			member_info AS member_info
+		LEFT JOIN member_authority AS member_authority USING (id)
+		LEFT JOIN member_authority AS authority USING (authority)
+		WHERE
+			member_info.id = #{username}
+	</select>
+</mapper>

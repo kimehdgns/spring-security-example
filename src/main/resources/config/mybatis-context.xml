@@ -8,6 +8,7 @@
 	<!-- TypeAliases -->
 	<typeAliases>
 		<typeAlias alias="memberInfo" type="com.mycompany.myapp.model.MemberInfo" />
+		<typeAlias alias="authority" type="com.mycompany.myapp.model.Authority" />
 	</typeAliases>
 
 	<!-- environments -->
@@ -26,5 +27,6 @@
 	<!-- mapper -->
 	<mappers>
 		<mapper resource="/mapper/map-temp.xml" />
+		<mapper resource="/mapper/map-member.xml" />
 	</mappers>
 </configuration>

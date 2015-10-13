@@ -1,4 +1,4 @@
-package com.mycompany.myapp;
+package com.mycompany.myapp.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;

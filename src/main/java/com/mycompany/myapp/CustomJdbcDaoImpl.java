@@ -21,7 +21,7 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
 		List<UserDetails> users = loadUsersByUsername(username);
-		int a = 1;
+		
 		if(users.size() == 0){
 			logger.debug("Query returned no results for user '" + username + "'");
 			

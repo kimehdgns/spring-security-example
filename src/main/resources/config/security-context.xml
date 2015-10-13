@@ -36,8 +36,9 @@
 		<logout
 		     invalidate-session="true"
 		     logout-success-url="/login_form"
-	     />
-	     
+		/>
+		
+		<remember-me key="uniqueAndSecret" token-validity-seconds="86400" />
 	</http>
 
 	<beans:bean id="signinSuccessHandler" class="com.mycompany.myapp.SigninSuccessHandler">

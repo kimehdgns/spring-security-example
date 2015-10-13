@@ -70,6 +70,10 @@
 					<input type="text" id="loginpwd" name="loginpwd" value=""/>
 				</td>
 			</tr>
+			<tr>
+				<td>Remember Me</td>
+				<td><input type="checkbox" name="_spring_security_remember_me" /></td>
+			</tr>
 		</table>
 	</form>
 </div>

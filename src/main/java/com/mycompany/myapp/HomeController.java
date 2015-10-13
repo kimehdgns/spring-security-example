@@ -20,4 +20,9 @@ public class HomeController {
 	public String main() {
 		return "main";
 	}
+	
+	@RequestMapping(value = "/denied", method = RequestMethod.GET)
+	public String denied() {
+		return "denied";
+	}
 }

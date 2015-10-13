@@ -47,11 +47,12 @@
 			alert('${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}');
 		</script>
 	</c:if>
+	<c:url value="/j_spring_security_check" var="loginUrl" />
 </head>
 <body>
 <div style="display:inline-block;">
 	로그인 화면
-	<form id="loginfrm" name="loginfrm" action="<c:url value="/j_spring_security_check" var="loginUrl" />" method="POST">
+	<form id="loginfrm" name="loginfrm" action="${loginUrl}" method="POST">
 		<table>
 			<tr>
 				<td>아이디</td>

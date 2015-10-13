@@ -16,13 +16,13 @@
 	<sec:authorize access="isFullyAuthenticated()">
 		<h2># This user is login by username / password.</h2>
 	</sec:authorize>
-	<p>${user.id} (${user.name}) 님! 안녕하세요.</p>
+	<p>${user.id} (${user.name}) 관리자님! 안녕하세요.</p>
 	<h1>
 		<sec:authorize access="hasRole('ROLE_USER')">
 			회원
 	    </sec:authorize>
 		<sec:authorize access="hasRole('ROLE_ADMIN')">
-			<a href="${pageContext.request.contextPath}/admin/main">관리자</a>
+			관리자
 	    </sec:authorize>
 	    <sec:authorize access="permitAll">
 			모두

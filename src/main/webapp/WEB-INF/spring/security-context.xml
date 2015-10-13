@@ -15,19 +15,20 @@
 	<http pattern="/images/*" security="none" />
 
 	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/main" access="isAuthenticated()" />
 		<intercept-url pattern="/login_form" access="permitAll" />
-		<intercept-url pattern="/main" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/**" access="permitAll" />
 
 		<form-login 
 			username-parameter="loginid"
 			password-parameter="loginpwd" 
 			login-page="/login_form"
-			login-processing-url="/login_form"
+			login-processing-url="/j_spring_security_check"
 			default-target-url="/main" 
 			authentication-success-handler-ref="signinSuccessHandler"
 			authentication-failure-handler-ref="signinFailureHandler"
-			always-use-default-target="true" />
+			always-use-default-target="false" />
 			
 		<remember-me 
 			data-source-ref="dataSource"
@@ -38,7 +39,7 @@
 		
 		<csrf />
 		
-		<logout invalidate-session="true" logout-success-url="/login/lgoin" />
+		<logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/login_form" />
 	</http>
 
 	<authentication-manager>

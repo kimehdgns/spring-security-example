@@ -20,4 +20,14 @@ public class HomeController {
 	public String main() {
 		return "main";
 	}
+	
+	@RequestMapping(value = "/admin/main", method = RequestMethod.GET)
+	public String admin_main() {
+		return "admin/main";
+	}
+	
+	@RequestMapping(value = "/denied", method = RequestMethod.GET)
+	public String denied() {
+		return "denied";
+	}
 }

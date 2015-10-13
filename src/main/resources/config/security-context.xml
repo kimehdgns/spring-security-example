@@ -32,6 +32,12 @@
      		authentication-failure-handler-ref="signinFailureHandler"
      		always-use-default-target="false"
 		/>
+		
+		<logout
+		     invalidate-session="true"
+		     logout-success-url="/login_form"
+	     />
+	     
 	</http>
 
 	<beans:bean id="signinSuccessHandler" class="com.mycompany.myapp.SigninSuccessHandler">

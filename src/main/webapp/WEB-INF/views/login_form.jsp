@@ -52,7 +52,7 @@
 <body>
 <div style="display:inline-block;">
 	로그인 화면
-	<form id="loginfrm" name="loginfrm" action="${pageContext.request.contextPath}/j_spring_security_check" method="POST">
+	<form id="loginfrm" name="loginfrm" action="<c:url value="/j_spring_security_check" var="loginUrl" />" method="POST">
 		<table>
 			<tr>
 				<td>아이디</td>

@@ -28,6 +28,8 @@ public class CustomJdbcDaoImpl extends JdbcDaoImpl{
 			UsernameNotFoundException ue = new UsernameNotFoundException(messages.getMessage("JdbcDaoImpl.notFound", new Object[]{username}, "Username {0} not found"));
 			throw ue;
 		}
+		
+		System.out.println("권성봉보옵ㅇ");
 
 		MemberInfo user = (MemberInfo)users.get(0);
 		

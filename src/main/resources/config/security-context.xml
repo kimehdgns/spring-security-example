@@ -19,9 +19,8 @@
 	
 	<http auto-config="true" use-expressions="true" access-denied-page="/denied">
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/login_form" access="isAnonymous()"/>
-		<intercept-url pattern="/main" access="permitAll"/>
-		<intercept-url pattern="/**" access="permitAll"/>
+		<intercept-url pattern="/main" access="isAuthenticated()"/>
+		<intercept-url pattern="/login_form" access="permitAll"/>
 		
 		<form-login 
 			username-parameter="loginid" 

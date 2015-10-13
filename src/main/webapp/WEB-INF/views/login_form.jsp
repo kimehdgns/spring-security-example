@@ -61,7 +61,7 @@
 				</td>
 				<td rowspan="2">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-					<input type="button" id="loginbtn" value="submit login"/>
+					<input type="button" id="loginbtn" value="submit login"/><br/>
 					<button type="button" onclick="login();">ajax login</button>
 				</td>
 			</tr>

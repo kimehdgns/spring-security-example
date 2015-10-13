@@ -12,10 +12,6 @@
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	
-	<mvc:annotation-driven />
-	<context:component-scan base-package="com.mycompany.myapp" />
-	
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
@@ -25,22 +21,4 @@
 		<property name="defaultEncoding" value="UTF-8"/>
 		<property name="cacheSeconds" value="5"/>
 	</bean>
-	
-	<context:property-placeholder location="classpath:properties/database.properties"/>
-	
-	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<beans:property name="driverClassName" value="${database.driver}"/>
-		<beans:property name="url" value="${database.url}"/>
-		<beans:property name="username" value="${database.username}"/>
-		<beans:property name="password" value="${database.password}"/>
-	</beans:bean>
-	
-	<!-- MyBatis SessionFactory/Session -->
-	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<beans:property name="dataSource" ref="dataSource"/>
-		<beans:property name="configLocation" value="classpath:/config/mybatis-context.xml"/>
-	</beans:bean>
-	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<beans:constructor-arg index="0" ref="sqlSessionFactory"/>
-	</beans:bean>
 </beans>
